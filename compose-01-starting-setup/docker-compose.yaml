@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    volumes:
+      - db:/data/db
+    env_file:
+      - ./env/mongo.env
+
+  frontend:
+    container_name: goals-frontend
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/src:/app/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+  backend:
+    container_name: goals-backend
+    build: ./backend
+    ports:
+      - 80:80
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - ./backend/config.env
+    depends_on:
+      - mongodb
+volumes:
+  db:
+  logs:

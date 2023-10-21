@@ -1,0 +1,5 @@
+docker ps -a --> all container in past 
+
+docker build .
+
+docker ps
